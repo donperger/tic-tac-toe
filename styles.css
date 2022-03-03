@@ -28,6 +28,7 @@ body {
 .title,
 .player2 div {
     color: var(--light-font-color);
+    font-weight: bold;
 }
 
 /*game board*/
