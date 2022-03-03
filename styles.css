@@ -1,0 +1,74 @@
+:root {
+    --dark-font-color: #424242;
+    --light-font-color: rgb(241, 241, 241);
+    --header-bg-color: #233840;
+}
+
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--dark-font-color);
+    margin: 0;
+}
+
+body {
+    width: 100vw;
+}
+
+/*header*/
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--header-bg-color);
+}
+
+.player1 div,
+.title,
+.player2 div {
+    color: var(--light-font-color);
+}
+
+/*game board*/
+
+.game-board {
+    display: grid;
+    width: 100vW;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    background-color: #0F2617;
+}
+
+.game-board div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #9BB9BF;
+    font-size: 5rem;
+    width: 100%;
+    place-self: center;
+}
+
+/*footer*/
+
+.footer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--header-bg-color);
+}
+
+.github-link {
+    margin: 0 .5rem;
+}
+
+.footer-container,
+.github-link {
+    color: var(--light-font-color);
+}
+
+.github-icon {
+    height: 3rem;
+}
