@@ -58,6 +58,10 @@ body {
     align-items: center;
     padding: 1rem;
     background-color: var(--header-bg-color);
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
 }
 
 .github-link {
