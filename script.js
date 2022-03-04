@@ -26,7 +26,7 @@ const gameBoard = (() => {
 })();
 
 const displayController = (() => {
-    let mark = "X"
+    let mark = "X";
 
     function initializeListeners () {
         const gameBoardFields = document.querySelectorAll(".field");
@@ -45,18 +45,17 @@ const displayController = (() => {
 
 })();
 
-const player = (name) => {
-    const playeName = name;
+const player = (name, mark) => {
     let score = 0;
 
-    return {name, score}
+    return {name, score, mark}
 }
 
 
-const player1 = player("p1");
-const player2 = player("p2");
-console.log(player1.name, player1.score);
-console.log(player2.name, player2.score);
+const player1 = player("p1", "X");
+const player2 = player("p2", "O");
+console.log(player1);
+console.log(player2);
 
 gameBoard.displayContent();
 displayController.initializeListeners();
