@@ -2,6 +2,7 @@
     --dark-font-color: #424242;
     --light-font-color: rgb(241, 241, 241);
     --header-bg-color: #233840;
+    --footer-bg-color: #517d8f;
 }
 
 * {
@@ -20,6 +21,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 10vh;
     padding: 1rem;
     background-color: var(--header-bg-color);
 }
@@ -31,12 +33,26 @@ body {
     font-weight: bold;
 }
 
+.title {
+    font-size: 4rem;
+}
+
+.player1,
+.player2 {
+    font-size: 2rem;
+}
+
 /*game board*/
 
 .game-board {
     display: grid;
     width: 100vW;
-    grid-template-columns: repeat(3, 1fr);
+    height: 85vh;
+    grid-template-columns: repeat(3, 10rem);
+    grid-template-rows: repeat(3, 10rem);
+    justify-content: center;
+    align-content: center;
+    padding: auto;
     gap: 1rem;
     background-color: #0F2617;
 }
@@ -48,6 +64,7 @@ body {
     background-color: #9BB9BF;
     font-size: 5rem;
     width: 100%;
+    height: 100%;
     place-self: center;
 }
 
@@ -57,12 +74,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1rem;
-    background-color: var(--header-bg-color);
+    padding: .5 1rem;
+    background-color: var(--footer-bg-color);
     position: fixed;
     bottom: 0;
     right: 0;
     width: 100%;
+    height: 5vh;
 }
 
 .github-link {
@@ -75,5 +93,5 @@ body {
 }
 
 .github-icon {
-    height: 3rem;
+    height: 5vh;
 }
