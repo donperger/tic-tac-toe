@@ -20,13 +20,15 @@ const gameBoard = (() => {
         })
     }
 
+    
+
     return {displayContent};
 })();
 
 const displayController = (() => {
     let mark = "X"
 
-    function initalizeListeners () {
+    function initializeListeners () {
         const gameBoardFields = document.querySelectorAll(".field");
         
         gameBoardFields.forEach(field => {
@@ -39,14 +41,22 @@ const displayController = (() => {
         mark = mark === "X" ? "O" : "X";
     }
     
-    return {initalizeListeners}
+    return {initializeListeners}
 
 })();
 
-const Player = (name) => {
+const player = (name) => {
     const playeName = name;
     let score = 0;
+
+    return {name, score}
 }
 
+
+const player1 = player("p1");
+const player2 = player("p2");
+console.log(player1.name, player1.score);
+console.log(player2.name, player2.score);
+
 gameBoard.displayContent();
-displayController.initalizeListeners();
+displayController.initializeListeners();
