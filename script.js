@@ -37,7 +37,10 @@ const displayController = (() => {
     }
 
     function addText (field) {
-        field.innerText = mark;
+        if (!field.innerText) {
+            field.innerText = mark;
+        }
+        
         mark = mark === "X" ? "O" : "X";
     }
     
