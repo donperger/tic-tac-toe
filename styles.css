@@ -39,7 +39,13 @@ body {
 
 .player1,
 .player2 {
+    display: flex;
     font-size: 2rem;
+}
+
+.player1-score,
+.player2-score {
+    margin-left: 1rem;
 }
 
 /*game board*/
