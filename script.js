@@ -28,6 +28,9 @@ const displayController = (() => {
     function addText (field) {
         if (!field.innerText) {
             field.innerText = mark;
+
+            const fieldId = field.id.split("-")[1];
+            gameBoard.gridArray[fieldId] = mark;
             mark = mark === "X" ? "O" : "X";
         }
     }
