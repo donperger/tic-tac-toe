@@ -3,11 +3,43 @@ const gameBoard = (() => {
                     "", "", "", 
                     "", "", ""];
 
-    return {gridArray}
+    function checkFields() {
+        if (gridArray[0] && gridArray[0] === gridArray[4] && gridArray[4] === gridArray [8]) {
+            console.log(`${gridArray[0]} has won`);
+            return
+        }
+
+        if (gridArray[2] && gridArray[2] === gridArray [4] && gridArray[4] === gridArray[6]) {
+            console.log(`${gridArray[2]} has won`);
+            return
+        }
+
+        for (let i = 0; i < 3; i++) {
+            if(gridArray[i] && gridArray[i] === gridArray[i + 3] && gridArray[i + 3] === gridArray[i + 6]) {
+                console.log(`${gridArray[i]} has won`);
+                return
+            }
+        }
+
+        for (let i = 0; i <= 6; i += 3) {
+            if (gridArray[i] && gridArray[i] === gridArray[i + 1] && gridArray[i+1] === gridArray[i+2]) {
+                console.log(`${gridArray[i]} has won`);
+                return
+            }
+        }
+
+        const isGameBoardFull = gridArray.every((item) => Boolean(item) === true)
+
+        if (isGameBoardFull === true) {
+            console.log("It's a tie!")
+        }      
+    }
+
+    return {gridArray, checkFields}
 })();
 
 const displayController = (() => {
-    let mark = "X";
+    let mark = "X"
 
     function displayScores(scoreP1, scoreP2) {
         const player1ScoreDiv = document.querySelector(".player1-score");
@@ -31,6 +63,9 @@ const displayController = (() => {
 
             const fieldId = field.id.split("-")[1];
             gameBoard.gridArray[fieldId] = mark;
+
+            gameBoard.checkFields();
+
             mark = mark === "X" ? "O" : "X";
         }
     }
