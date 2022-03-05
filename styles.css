@@ -64,13 +64,13 @@ body {
 
 .game-board {
     display: grid;
+    box-sizing: border-box;
     width: 100vW;
-    height: 75vh;
+    height: 65vh;
     grid-template-columns: repeat(3, 10rem);
     grid-template-rows: repeat(3, 10rem);
     justify-content: center;
-    align-content: center;
-    padding: auto;
+    padding: 1rem;
     gap: 1rem;
     background-color: var(--main-bg-color);
 }
@@ -85,6 +85,47 @@ body {
     height: 100%;
     place-self: center;
     cursor: pointer;
+}
+
+.button-container {
+    box-sizing: border-box;
+    background-color: var(--main-bg-color);
+    padding-bottom: 6vh;
+    display: flex;
+    justify-content: center;
+}
+
+.button-container button {
+    height: 3rem;
+    width: 10rem;
+    font-size: 1.2rem;
+    border: 1px solid #404040;
+    border-radius: 1rem;
+    padding: 0 1.5rem;
+    cursor: pointer;
+    background-color: #8C8C8C;
+    color: #424242;
+    font-weight: 500;
+    transition: .5s;
+}
+
+.button-container button:hover {
+    background-color: #404040;
+    color: azure;
+    border-color: azure;
+}
+
+.button-container button:active {
+    position: relative;
+    bottom: .1rem;
+}
+
+.again {
+    margin-right: 1rem;
+}
+
+.res {
+    margin-left: 1rem;
 }
 
 /*footer*/
