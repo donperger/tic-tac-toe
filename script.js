@@ -3,20 +3,29 @@ const gameBoard = (() => {
                     "", "", "", 
                     "", "", ""];
 
+    const playAgainButton = document.querySelector(".again");
+    playAgainButton.addEventListener("click", () => console.log("Play again"));
+
+    const restartButton = document.querySelector(".res");
+    restartButton.addEventListener("click", () => console.log("Restart"))
+
     function checkFields() {
         if (gridArray[0] && gridArray[0] === gridArray[4] && gridArray[4] === gridArray [8]) {
             addPoint(gridArray[0]);
+            disableFields();
             return;
         }
 
         if (gridArray[2] && gridArray[2] === gridArray [4] && gridArray[4] === gridArray[6]) {
             addPoint(gridArray[2]);
+            disableFields();
             return;
         }
 
         for (let i = 0; i < 3; i++) {
             if(gridArray[i] && gridArray[i] === gridArray[i + 3] && gridArray[i + 3] === gridArray[i + 6]) {
                 addPoint(gridArray[i]);
+                disableFields();
                 return;
             }
         }
@@ -24,6 +33,7 @@ const gameBoard = (() => {
         for (let i = 0; i <= 6; i += 3) {
             if (gridArray[i] && gridArray[i] === gridArray[i + 1] && gridArray[i+1] === gridArray[i+2]) {
                 addPoint(gridArray[i]);
+                disableFields();
                 return;
             }
         }
@@ -43,6 +53,12 @@ const gameBoard = (() => {
         }
 
         displayController.displayScores(player1.score, player2.score);
+    }
+
+    function disableFields() {
+        const fieldDivs = document.querySelectorAll(".field");
+
+        fieldDivs.forEach(div => div.style.pointerEvents = "none");
     }
 
     return {gridArray, checkFields}
