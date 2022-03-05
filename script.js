@@ -5,26 +5,26 @@ const gameBoard = (() => {
 
     function checkFields() {
         if (gridArray[0] && gridArray[0] === gridArray[4] && gridArray[4] === gridArray [8]) {
-            console.log(`${gridArray[0]} has won`);
-            return
+            addPoint(gridArray[0]);
+            return;
         }
 
         if (gridArray[2] && gridArray[2] === gridArray [4] && gridArray[4] === gridArray[6]) {
-            console.log(`${gridArray[2]} has won`);
-            return
+            addPoint(gridArray[2]);
+            return;
         }
 
         for (let i = 0; i < 3; i++) {
             if(gridArray[i] && gridArray[i] === gridArray[i + 3] && gridArray[i + 3] === gridArray[i + 6]) {
-                console.log(`${gridArray[i]} has won`);
-                return
+                addPoint(gridArray[i]);
+                return;
             }
         }
 
         for (let i = 0; i <= 6; i += 3) {
             if (gridArray[i] && gridArray[i] === gridArray[i + 1] && gridArray[i+1] === gridArray[i+2]) {
-                console.log(`${gridArray[i]} has won`);
-                return
+                addPoint(gridArray[i]);
+                return;
             }
         }
 
@@ -35,11 +35,23 @@ const gameBoard = (() => {
         }      
     }
 
+    function addPoint (mark) {
+        if (mark === "X") {
+            player1.score += 1;
+        } else {
+            player2.score += 1;
+        }
+
+        displayController.displayScores(player1.score, player2.score);
+    }
+
     return {gridArray, checkFields}
 })();
 
 const displayController = (() => {
-    let mark = "X"
+    const gameBoardDiv = document.querySelector(".game-board");
+    const roundLabel = document.querySelector(".round-label");
+    let mark = "X";
 
     function displayScores(scoreP1, scoreP2) {
         const player1ScoreDiv = document.querySelector(".player1-score");
@@ -67,9 +79,10 @@ const displayController = (() => {
             gameBoard.checkFields();
 
             mark = mark === "X" ? "O" : "X";
+
+            displayMove();
         }
     }
-        const gameBoardDiv = document.querySelector(".game-board");
 
     function createGridCell(item, index) {
         const xoContainer = document.createElement("div");
@@ -84,6 +97,16 @@ const displayController = (() => {
         array.forEach((item, index) => {
             createGridCell(item, index)
         })
+
+        displayMove();
+    }
+
+    function displayMove () {
+        if (mark === "X") {
+            roundLabel.textContent = "It's Player 1's turn."
+        } else {
+            roundLabel.textContent = "It's Player 2's turn."
+        }
     }
 
     return {initializeListeners, displayContent, displayScores}
