@@ -4,12 +4,25 @@ const gameBoard = (() => {
                     "", "", ""];
 
     const playAgainButton = document.querySelector(".again");
-    playAgainButton.addEventListener("click", () => console.log("Play again"));
+    playAgainButton.addEventListener("click", playAgain);
 
     const restartButton = document.querySelector(".res");
-    restartButton.addEventListener("click", () => console.log("Restart"))
+    restartButton.addEventListener("click", () => console.log("Restart"));
+
+    function initializeListeners () {
+        const gameBoardFields = document.querySelectorAll(".field");
+        
+        gameBoardFields.forEach(field => {
+        field.addEventListener("click", () => displayController.addText(field))
+        })
+    }
+
+    function addMarkToArray(mark, id) {
+        gridArray[id] = mark;
+    }
 
     function checkFields() {
+        console.log(gridArray)
         if (gridArray[0] && gridArray[0] === gridArray[4] && gridArray[4] === gridArray [8]) {
             addPoint(gridArray[0]);
             disableFields();
@@ -58,10 +71,23 @@ const gameBoard = (() => {
     function disableFields() {
         const fieldDivs = document.querySelectorAll(".field");
 
-        fieldDivs.forEach(div => div.style.pointerEvents = "none");
+        fieldDivs.forEach(field => field.style.pointerEvents = "none");
     }
 
-    return {gridArray, checkFields}
+    function playAgain() {
+        const fieldDivs = document.querySelectorAll(".field");
+
+        fieldDivs.forEach(field => {
+            field.style.pointerEvents = "auto";
+            field.textContent = "";
+        });
+
+        gridArray = gridArray.map(item => item = "");
+
+        initializeListeners();
+    }
+
+    return {gridArray, initializeListeners, addMarkToArray, checkFields}
 })();
 
 const displayController = (() => {
@@ -77,20 +103,12 @@ const displayController = (() => {
         player2ScoreDiv.textContent = scoreP2;
     }
 
-    function initializeListeners () {
-        const gameBoardFields = document.querySelectorAll(".field");
-        
-        gameBoardFields.forEach(field => {
-        field.addEventListener("click", () => addText(field))
-        })
-    }
-
     function addText (field) {
         if (!field.innerText) {
             field.innerText = mark;
 
             const fieldId = field.id.split("-")[1];
-            gameBoard.gridArray[fieldId] = mark;
+            gameBoard.addMarkToArray(mark, fieldId);
 
             gameBoard.checkFields();
 
@@ -125,7 +143,7 @@ const displayController = (() => {
         }
     }
 
-    return {initializeListeners, displayContent, displayScores}
+    return {displayContent, displayScores, addText}
 
 })();
 
@@ -141,4 +159,4 @@ const player2 = player("p2", "O");
 
 displayController.displayScores(player1.score, player2.score);
 displayController.displayContent( gameBoard.gridArray);
-displayController.initializeListeners();
+gameBoard.initializeListeners();
