@@ -151,11 +151,28 @@ const gameBoard = (() => {
     return {gridArray, initializeListeners, addMarkToArray, checkFields, enableFields}
 })();
 
+const ai = (() => {
+    function aiMove(gridArray) {
+        let randomField = gridArray[Math.floor(Math.random()*gridArray.length)]
+    };
+})(); 
+
 const displayController = (() => {
     const gameBoardDiv = document.querySelector(".game-board");
     const roundLabel = document.querySelector(".round-label");
     const announcer = document.querySelector(".announcer");
+    const aiDropdown = document.querySelector("#ai");
+    const player2Label = document.querySelector(".player2-label");
+    const player2Field = document.querySelector("#player2_name")
     let mark = "X";
+
+    aiDropdown.addEventListener("change", () => {
+        if (aiDropdown.value === "player") {
+            enablePlayer2();
+        } else {
+            disablePlayer2();
+        }
+    })
 
     function displayScores(scoreP1, scoreP2) {
         const player1ScoreDiv = document.querySelector(".player1-score");
@@ -230,6 +247,17 @@ const displayController = (() => {
     function vanishAnnouncer () {
         announcer.style.display = "none";
     }
+
+    function disablePlayer2() {
+        player2Label.style.textDecoration = "line-through";
+        player2Field.disabled = true;
+    }
+
+    function enablePlayer2 ()  {
+        player2Label.style.textDecoration = "none";
+        player2Field.disabled = false;
+    }
+
  
     return {displayContent, displayScores, addText, emptyFields, congratulate, vanishAnnouncer, displayMove}
 
