@@ -163,6 +163,7 @@ input[type=text]:active {
 
 .field {
     display: flex;
+    pointer-events: none;
     justify-content: center;
     align-items: center;
     background-color: #9BB9BF;
