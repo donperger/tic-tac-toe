@@ -51,6 +51,19 @@ body {
 
 /*main*/
 
+.announcer {
+    display: none;
+    box-sizing: border-box;
+    position: absolute;
+    top: 45vh;
+    width: 100%;
+    text-align: center;
+    font-size: 5rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: azure;
+    padding: 2rem;
+}
+
 .round-label {
     box-sizing: border-box;
     height: 10vh;
