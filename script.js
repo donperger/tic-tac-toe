@@ -7,7 +7,7 @@ const gameBoard = (() => {
     playAgainButton.addEventListener("click", playAgain);
 
     const restartButton = document.querySelector(".res");
-    restartButton.addEventListener("click", () => console.log("Restart"));
+    restartButton.addEventListener("click", restart);
 
     function initializeListeners () {
         const gameBoardFields = document.querySelectorAll(".field");
@@ -22,16 +22,17 @@ const gameBoard = (() => {
     }
 
     function checkFields() {
-        console.log(gridArray)
         if (gridArray[0] && gridArray[0] === gridArray[4] && gridArray[4] === gridArray [8]) {
             addPoint(gridArray[0]);
             disableFields();
+            displayController.congratulate(gridArray[0])
             return;
         }
 
         if (gridArray[2] && gridArray[2] === gridArray [4] && gridArray[4] === gridArray[6]) {
             addPoint(gridArray[2]);
             disableFields();
+            displayController.congratulate(gridArray[2]);
             return;
         }
 
@@ -39,6 +40,7 @@ const gameBoard = (() => {
             if(gridArray[i] && gridArray[i] === gridArray[i + 3] && gridArray[i + 3] === gridArray[i + 6]) {
                 addPoint(gridArray[i]);
                 disableFields();
+                displayController.congratulate(gridArray[i]);
                 return;
             }
         }
@@ -47,6 +49,7 @@ const gameBoard = (() => {
             if (gridArray[i] && gridArray[i] === gridArray[i + 1] && gridArray[i+1] === gridArray[i+2]) {
                 addPoint(gridArray[i]);
                 disableFields();
+                displayController.congratulate(gridArray[i]);
                 return;
             }
         }
@@ -67,7 +70,7 @@ const gameBoard = (() => {
 
         displayController.displayScores(player1.score, player2.score);
     }
-
+    
     function disableFields() {
         const fieldDivs = document.querySelectorAll(".field");
 
@@ -75,16 +78,22 @@ const gameBoard = (() => {
     }
 
     function playAgain() {
-        const fieldDivs = document.querySelectorAll(".field");
+        displayController.emptyFields();
 
-        fieldDivs.forEach(field => {
-            field.style.pointerEvents = "auto";
-            field.textContent = "";
-        });
+        emptyGridArray();
+    }
 
+    function emptyGridArray () {
         gridArray = gridArray.map(item => item = "");
+    }
 
-        initializeListeners();
+    function restart() {
+        player1.score = 0;
+        player2.score = 0;
+        displayController.displayScores(player1.score, player2.score);
+
+        emptyGridArray();
+        displayController.emptyFields()
     }
 
     return {gridArray, initializeListeners, addMarkToArray, checkFields}
@@ -143,7 +152,25 @@ const displayController = (() => {
         }
     }
 
-    return {displayContent, displayScores, addText}
+    function emptyFields () {
+        const fieldDivs = document.querySelectorAll(".field");
+
+        fieldDivs.forEach(field => {
+            field.style.pointerEvents = "auto";
+            field.textContent = "";
+        });
+    }
+
+    function congratulate(mark) {
+        if (mark === "X") {
+            var cong = `The winner is: ${player1.name}`;
+        } else {
+            var cong = `The winner is: ${player2.name}`;
+        }
+        console.log(cong);
+    }
+ 
+    return {displayContent, displayScores, addText, emptyFields, congratulate}
 
 })();
 
