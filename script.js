@@ -1,3 +1,43 @@
+const player = (name, mark) => {
+    let score = 0;
+
+    return {name, score, mark}
+}
+
+const formController = (() => {
+    let player1Name = "Player1";
+    let player2Name = "Player2";
+    const form = document.querySelector(".name-form")
+    const player1NameInput = document.querySelector("#player1_name");
+    const player2NameInput = document.querySelector("#player2_name")
+    const startButton = document.querySelector(".start");
+
+    startButton.addEventListener("click", startGame);
+
+    function startGame() {
+        if (player1NameInput.value) player1Name = player1NameInput.value;
+        if (player1NameInput.value) player2Name = player2NameInput.value;
+        
+
+        player1NameInput.value = "";
+        player2NameInput.value = "";
+
+        player1.name = player1Name;
+        player2.name = player2Name;
+
+        displayController.displayMove();
+
+        form.style.display = "none";
+        gameBoard.enableFields();
+    }
+
+    function displayForm () {
+        form.style.display = "grid";
+    }
+
+    return {displayForm}
+})();
+
 const gameBoard = (() => {
     let gridArray = ["", "", "", 
                     "", "", "", 
@@ -57,7 +97,7 @@ const gameBoard = (() => {
         const isGameBoardFull = gridArray.every((item) => Boolean(item) === true)
 
         if (isGameBoardFull === true) {
-            console.log("It's a tie!")
+            displayController.congratulate("tie");
         }      
     }
 
@@ -75,6 +115,12 @@ const gameBoard = (() => {
         const fieldDivs = document.querySelectorAll(".field");
 
         fieldDivs.forEach(field => field.style.pointerEvents = "none");
+    }
+
+    function enableFields() {
+        const fieldDivs = document.querySelectorAll(".field");
+
+        fieldDivs.forEach(field => field.style.pointerEvents = "auto");  
     }
 
     function playAgain() {
@@ -97,10 +143,12 @@ const gameBoard = (() => {
         displayController.displayScores(player1.score, player2.score);
 
         emptyGridArray();
-        displayController.emptyFields()
+        displayController.emptyFields();
+
+        formController.displayForm();
     }
 
-    return {gridArray, initializeListeners, addMarkToArray, checkFields}
+    return {gridArray, initializeListeners, addMarkToArray, checkFields, enableFields}
 })();
 
 const displayController = (() => {
@@ -151,9 +199,9 @@ const displayController = (() => {
 
     function displayMove () {
         if (mark === "X") {
-            roundLabel.textContent = "It's Player 1's turn."
+            roundLabel.textContent = `It's ${player1.name}'s (X) turn.`
         } else {
-            roundLabel.textContent = "It's Player 2's turn."
+            roundLabel.textContent = `It's ${player2.name}'s (O) turn.`
         }
     }
 
@@ -169,8 +217,10 @@ const displayController = (() => {
     function congratulate(mark) {
         if (mark === "X") {
             var cong = `The winner is: ${player1.name}`;
-        } else {
+        } else if (mark === "X") {
             var cong = `The winner is: ${player2.name}`;
+        } else {
+            var cong = "It is a TIE!"
         }
 
         announcer.textContent = cong;
@@ -181,16 +231,9 @@ const displayController = (() => {
         announcer.style.display = "none";
     }
  
-    return {displayContent, displayScores, addText, emptyFields, congratulate, vanishAnnouncer}
+    return {displayContent, displayScores, addText, emptyFields, congratulate, vanishAnnouncer, displayMove}
 
 })();
-
-const player = (name, mark) => {
-    let score = 0;
-
-    return {name, score, mark}
-}
-
 
 const player1 = player("p1", "X");
 const player2 = player("p2", "O");
