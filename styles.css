@@ -51,6 +51,77 @@ body {
 
 /*main*/
 
+/*name form*/
+.name-form {
+    padding: 1rem;
+    display: grid;
+    gap: 1rem;
+    position: absolute;
+    top: 10vh;
+    box-sizing: border-box;
+    width: 100%;
+    background-color: rgba(255, 255, 255, .9);
+}
+
+.question {
+    font-size: 3rem;
+    font-weight: bold;
+    place-self: center;
+}
+
+.input-container {
+    place-self: center;
+    display: flex;
+    width: 40%;
+    justify-content: space-around;
+}
+
+input[type=text] {
+    padding: .2rem .6rem;
+    font-size: 1.2rem;
+    border-radius: .5rem;
+    border: 1px solid rgba(42, 42, 42, .4);
+}
+
+input[type=text]:active {
+    border: 1px solid #424242
+}
+
+.player1-input,
+.player2-input {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2rem;
+}
+
+.start {
+    place-self: center;
+    width: 15rem;
+    font-size: 1.5rem;
+    border: 1px solid #424242;
+    border-radius: .5rem;
+    cursor: pointer;
+    box-shadow: 0px 10px 14px -7px #276873;
+	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+	background-color:#599bb3;
+    font-weight:bold;
+	color:#ffffff;
+    padding:.5rem 1rem;
+    transition: .2s;
+
+}
+
+.start:hover {
+	background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+	background-color:#408c99;
+}
+.start:active {
+	position:relative;
+	top:1px;
+}
+
+/*annuoncer*/
+
 .announcer {
     display: none;
     box-sizing: border-box;
@@ -63,6 +134,8 @@ body {
     color: azure;
     padding: 2rem;
 }
+
+/*game board*/
 
 .round-label {
     box-sizing: border-box;
