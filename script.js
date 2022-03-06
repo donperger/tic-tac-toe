@@ -78,6 +78,8 @@ const gameBoard = (() => {
     }
 
     function playAgain() {
+        displayController.vanishAnnouncer();
+
         displayController.emptyFields();
 
         emptyGridArray();
@@ -88,6 +90,8 @@ const gameBoard = (() => {
     }
 
     function restart() {
+        displayController.vanishAnnouncer();
+
         player1.score = 0;
         player2.score = 0;
         displayController.displayScores(player1.score, player2.score);
@@ -102,6 +106,7 @@ const gameBoard = (() => {
 const displayController = (() => {
     const gameBoardDiv = document.querySelector(".game-board");
     const roundLabel = document.querySelector(".round-label");
+    const announcer = document.querySelector(".announcer");
     let mark = "X";
 
     function displayScores(scoreP1, scoreP2) {
@@ -167,10 +172,16 @@ const displayController = (() => {
         } else {
             var cong = `The winner is: ${player2.name}`;
         }
-        console.log(cong);
+
+        announcer.textContent = cong;
+        announcer.style.display = "block";
+    }
+
+    function vanishAnnouncer () {
+        announcer.style.display = "none";
     }
  
-    return {displayContent, displayScores, addText, emptyFields, congratulate}
+    return {displayContent, displayScores, addText, emptyFields, congratulate, vanishAnnouncer}
 
 })();
 
