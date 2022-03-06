@@ -217,7 +217,7 @@ const displayController = (() => {
     function congratulate(mark) {
         if (mark === "X") {
             var cong = `The winner is: ${player1.name}`;
-        } else if (mark === "X") {
+        } else if (mark === "O") {
             var cong = `The winner is: ${player2.name}`;
         } else {
             var cong = "It is a TIE!"
