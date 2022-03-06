@@ -11,19 +11,29 @@ const formController = (() => {
     const player1NameInput = document.querySelector("#player1_name");
     const player2NameInput = document.querySelector("#player2_name")
     const startButton = document.querySelector(".start");
+    const aiDropdown = document.querySelector("#ai");
+    const player2Label = document.querySelector(".player2-label");
+
+    aiDropdown.addEventListener("change", () => {
+        if (aiDropdown.value === "player") {
+            _enablePlayer2();
+        } else {
+            _disablePlayer2();
+        };
+    })
 
     startButton.addEventListener("click", startGame);
 
     function startGame() {
-        if (player1NameInput.value) player1Name = player1NameInput.value;
-        if (player1NameInput.value) player2Name = player2NameInput.value;
-        
+        if (player1NameInput.value) player1.name = player1NameInput.value;
+        if (player2NameInput.value) {
+            player2.name = player2NameInput.value;
+        } else if (aiDropdown.value === "random" || aiDropdown.value === "unbeatable") {
+            player2.name = "AI";
+        }
 
         player1NameInput.value = "";
         player2NameInput.value = "";
-
-        player1.name = player1Name;
-        player2.name = player2Name;
 
         displayController.displayMove();
 
@@ -35,6 +45,16 @@ const formController = (() => {
         form.style.display = "grid";
     }
 
+    function _disablePlayer2() {
+        player2Label.style.textDecoration = "line-through";
+        player2NameInput.disabled = true;
+    }
+
+    function _enablePlayer2 ()  {
+        player2Label.style.textDecoration = "none";
+        player2NameInput.disabled = false;
+    }
+
     return {displayForm}
 })();
 
@@ -42,6 +62,8 @@ const gameBoard = (() => {
     let gridArray = ["", "", "", 
                     "", "", "", 
                     "", "", ""];
+
+    let isAIMove = false;
 
     const playAgainButton = document.querySelector(".again");
     playAgainButton.addEventListener("click", playAgain);
@@ -153,26 +175,21 @@ const gameBoard = (() => {
 
 const ai = (() => {
     function aiMove(gridArray) {
-        let randomField = gridArray[Math.floor(Math.random()*gridArray.length)]
+        let randomFieldNumber = Math.floor(Math.random()*gridArray.length);
+
+        while (gridArray[randomFieldNumber]) {
+            randomFieldNumber = Math.floor(Math.random()*gridArray.length);
+        }
     };
+
+    return {aiMove}
 })(); 
 
 const displayController = (() => {
     const gameBoardDiv = document.querySelector(".game-board");
     const roundLabel = document.querySelector(".round-label");
     const announcer = document.querySelector(".announcer");
-    const aiDropdown = document.querySelector("#ai");
-    const player2Label = document.querySelector(".player2-label");
-    const player2Field = document.querySelector("#player2_name")
     let mark = "X";
-
-    aiDropdown.addEventListener("change", () => {
-        if (aiDropdown.value === "player") {
-            enablePlayer2();
-        } else {
-            disablePlayer2();
-        }
-    })
 
     function displayScores(scoreP1, scoreP2) {
         const player1ScoreDiv = document.querySelector(".player1-score");
@@ -247,17 +264,6 @@ const displayController = (() => {
     function vanishAnnouncer () {
         announcer.style.display = "none";
     }
-
-    function disablePlayer2() {
-        player2Label.style.textDecoration = "line-through";
-        player2Field.disabled = true;
-    }
-
-    function enablePlayer2 ()  {
-        player2Label.style.textDecoration = "none";
-        player2Field.disabled = false;
-    }
-
  
     return {displayContent, displayScores, addText, emptyFields, congratulate, vanishAnnouncer, displayMove}
 
