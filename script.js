@@ -5,8 +5,6 @@ const player = (name, mark) => {
 }
 
 const formController = (() => {
-    let player1Name = "Player1";
-    let player2Name = "Player2";
     const form = document.querySelector(".name-form")
     const player1NameInput = document.querySelector("#player1_name");
     const player2NameInput = document.querySelector("#player2_name")
@@ -63,7 +61,6 @@ const gameBoard = (() => {
                     "", "", "", 
                     "", "", ""];
 
-    let isAIMove = false;
 
     const playAgainButton = document.querySelector(".again");
     playAgainButton.addEventListener("click", playAgain);
@@ -75,7 +72,22 @@ const gameBoard = (() => {
         const gameBoardFields = document.querySelectorAll(".field");
         
         gameBoardFields.forEach(field => {
-        field.addEventListener("click", () => displayController.addText(field))
+        field.addEventListener("click", () => {
+            displayController.addText(field);
+            
+            if (player2.name === "AI") {
+                const isGameBoardFull = _chekFullGameBoard();
+                
+                if ( isGameBoardFull === false) {
+                   const aiFieldId = ai.aiMove(gridArray);
+            
+                    gridArray[aiFieldId] = "O"; 
+                    displayController.addAiMove(aiFieldId);
+                }
+                
+                checkFields();
+            }
+        })
         })
     }
 
@@ -116,7 +128,7 @@ const gameBoard = (() => {
             }
         }
 
-        const isGameBoardFull = gridArray.every((item) => Boolean(item) === true)
+        const isGameBoardFull = _chekFullGameBoard();
 
         if (isGameBoardFull === true) {
             displayController.congratulate("tie");
@@ -170,16 +182,24 @@ const gameBoard = (() => {
         formController.displayForm();
     }
 
-    return {gridArray, initializeListeners, addMarkToArray, checkFields, enableFields}
+    function _chekFullGameBoard () {
+        return gridArray.every((item) => Boolean(item) === true)
+    }
+
+    return {gridArray, initializeListeners, addMarkToArray, enableFields, checkFields}
 })();
 
 const ai = (() => {
     function aiMove(gridArray) {
+        
         let randomFieldNumber = Math.floor(Math.random()*gridArray.length);
 
         while (gridArray[randomFieldNumber]) {
             randomFieldNumber = Math.floor(Math.random()*gridArray.length);
         }
+
+        return randomFieldNumber;
+        
     };
 
     return {aiMove}
@@ -205,18 +225,17 @@ const displayController = (() => {
 
             const fieldId = field.id.split("-")[1];
             gameBoard.addMarkToArray(mark, fieldId);
-
             gameBoard.checkFields();
 
-            mark = mark === "X" ? "O" : "X";
-
+            if (player2.name !== "AI") mark = mark === "X" ? "O" : "X";
+            
             displayMove();
         }
     }
 
     function createGridCell(item, index) {
         const xoContainer = document.createElement("div");
-        xoContainer.setAttribute("id",`filed-${index}`);
+        xoContainer.setAttribute("id",`field-${index}`);
         xoContainer.classList.add("field");
         xoContainer.textContent = item;
 
@@ -240,6 +259,8 @@ const displayController = (() => {
     }
 
     function emptyFields () {
+        if (player2.name === "AI") mark = "X";
+
         const fieldDivs = document.querySelectorAll(".field");
 
         fieldDivs.forEach(field => {
@@ -264,8 +285,13 @@ const displayController = (() => {
     function vanishAnnouncer () {
         announcer.style.display = "none";
     }
+
+    function addAiMove(aiFieldId) {
+        const gridField = document.getElementById(`field-${aiFieldId}`);
+        gridField.innerText = "O";
+    }
  
-    return {displayContent, displayScores, addText, emptyFields, congratulate, vanishAnnouncer, displayMove}
+    return {displayContent, displayScores, addText, emptyFields, congratulate, vanishAnnouncer, displayMove, addAiMove}
 
 })();
 
