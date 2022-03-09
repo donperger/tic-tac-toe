@@ -87,6 +87,7 @@ const gameBoard = (() => {
                 }
                 
                 checkFields();
+                console.log(ai.getEmptyFieldsIndex(gridArray))
             }
         })
         })
@@ -203,7 +204,16 @@ const ai = (() => {
         
     };
 
-    return {aiMove}
+    function getEmptyFieldsIndex(board) {
+        let indexedBoard = board.map((elem, index) => {
+            if (elem) return elem;
+            else return index;
+        })
+
+        return indexedBoard.filter(elem => elem !== "X" && elem !== "O")
+    }
+
+    return {aiMove, getEmptyFieldsIndex}
 })(); 
 
 const displayController = (() => {
