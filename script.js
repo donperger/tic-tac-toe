@@ -84,11 +84,16 @@ const gameBoard = (() => {
             
                     gridArray[aiFieldId] = "O"; 
                     displayController.addAiMove(aiFieldId);
-                }
-                
-                checkFields();
-                console.log(ai.getEmptyFieldsIndex(gridArray))
+                }    
             }
+            let check = checkFields();
+            if (check[0] === true || check[1] === "tie") {
+                addPoint(check[1]);
+                disableFields();
+                displayController.congratulate(check[1]);
+            }
+            
+            console.log(ai.getEmptyFieldsIndex(gridArray))
         })
         })
     }
@@ -99,42 +104,32 @@ const gameBoard = (() => {
 
     function checkFields() {
         if (gridArray[0] && gridArray[0] === gridArray[4] && gridArray[4] === gridArray [8]) {
-            addPoint(gridArray[0]);
-            disableFields();
-            displayController.congratulate(gridArray[0])
-            return;
+            return [true, gridArray[0]];
         }
 
         if (gridArray[2] && gridArray[2] === gridArray [4] && gridArray[4] === gridArray[6]) {
-            addPoint(gridArray[2]);
-            disableFields();
-            displayController.congratulate(gridArray[2]);
-            return;
+            return [true, gridArray[2]];
         }
 
         for (let i = 0; i < 3; i++) {
             if(gridArray[i] && gridArray[i] === gridArray[i + 3] && gridArray[i + 3] === gridArray[i + 6]) {
-                addPoint(gridArray[i]);
-                disableFields();
-                displayController.congratulate(gridArray[i]);
-                return;
+                return [true, gridArray[i]];
             }
         }
 
         for (let i = 0; i <= 6; i += 3) {
             if (gridArray[i] && gridArray[i] === gridArray[i + 1] && gridArray[i+1] === gridArray[i+2]) {
-                addPoint(gridArray[i]);
-                disableFields();
-                displayController.congratulate(gridArray[i]);
-                return;
+                return [true, gridArray[i]];
             }
         }
 
         const isGameBoardFull = _chekFullGameBoard();
 
         if (isGameBoardFull === true) {
-            displayController.congratulate("tie");
-        }      
+            return [false, "tie"];
+        }
+        
+        return [false, undefined];
     }
 
     function addPoint (mark) {
@@ -236,7 +231,6 @@ const displayController = (() => {
 
             const fieldId = field.id.split("-")[1];
             gameBoard.addMarkToArray(mark, fieldId);
-            gameBoard.checkFields();
 
             if (player2.name !== "AI") mark = mark === "X" ? "O" : "X";
             
@@ -262,6 +256,8 @@ const displayController = (() => {
     }
 
     function displayMove () {
+        if(player2.name === "AI") mark = "X"
+
         if (mark === "X") {
             roundLabel.textContent = `It's ${player1.name}'s (X) turn.`
         } else {
