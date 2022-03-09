@@ -51,6 +51,7 @@ const formController = (() => {
     function _enablePlayer2 ()  {
         player2Label.style.textDecoration = "none";
         player2NameInput.disabled = false;
+        player2.name = "p2";
     }
 
     return {displayForm}
