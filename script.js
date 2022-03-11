@@ -74,14 +74,20 @@ const gameBoard = (() => {
         
         gameBoardFields.forEach(field => {
         field.addEventListener("click", () => {
+            disableOneField(field.id);
             displayController.addText(field);
             
             if (player2.name === "AI") {
+                const aiType = getAiType();
                 const isGameBoardFull = _chekFullGameBoard();
                 
                 if ( isGameBoardFull === false) {
-                   const aiFieldId = ai.aiMove(gridArray);
-            
+                    if (aiType === "random") {
+                        var aiFieldId = ai.aiMove(gridArray);
+                    } else {
+                        var aiFieldId = ai.minimax(gridArray, "X");
+                    }       
+
                     gridArray[aiFieldId] = "O"; 
                     displayController.addAiMove(aiFieldId);
                 }    
@@ -89,7 +95,6 @@ const gameBoard = (() => {
             let check = checkFields(gridArray);
             if (check[0] === true || check[1] === "tie") {
                 addPoint(check[1]);
-                disableFields();
                 displayController.congratulate(check[1]);
             }
         })
@@ -133,7 +138,7 @@ const gameBoard = (() => {
     function addPoint (mark) {
         if (mark === "X") {
             player1.score += 1;
-        } else {
+        } else if (mark === "O") {
             player2.score += 1;
         }
 
@@ -144,6 +149,12 @@ const gameBoard = (() => {
         const fieldDivs = document.querySelectorAll(".field");
 
         fieldDivs.forEach(field => field.style.pointerEvents = "none");
+    }
+
+    function disableOneField(fieldId) {
+        const filedDiv = document.getElementById(fieldId);
+
+        filedDiv.style.pointerEvents = "none";
     }
 
     function enableFields() {
@@ -181,6 +192,10 @@ const gameBoard = (() => {
         return gridArray.every((item) => Boolean(item) === true)
     }
 
+    function getAiType() {
+        return document.querySelector("#ai").value;
+    }
+
     return {gridArray, initializeListeners, addMarkToArray, enableFields, checkFields}
 })();
 
@@ -206,63 +221,60 @@ const ai = (() => {
         return indexedBoard.filter(elem => elem !== "X" && elem !== "O")
     }
 
-    function minimax(newBoard, player) {
-        var availableFields = getEmptyFieldsIndex(newBoard);
-        console.log(availableFields);
-
+    function minimax(newBoard, playerMark) {
+        const emptyFieldsIndexes = getEmptyFieldsIndex(newBoard);
+        
         if (gameBoard.checkFields(newBoard)[0]) {
-            if (gameBoard.checkFields(newBoard)[1] === "X") {
-                return {score: -10}
+            if(gameBoard.checkFields(newBoard)[1] === "X") {
+                return -1;
             } else if (gameBoard.checkFields(newBoard)[1] === "O") {
-                return {score: 10}
-            } else if (availableFields.length === 0) {
-                return {score: 0}
+                return 1;
+            }
+        } else if (emptyFieldsIndexes.length === 0) {
+            return 0;
+        }
+
+        const nextFields = [];
+
+        for (let i = 0; i < emptyFieldsIndexes.length; i++) {
+            const currentStepInfo = {};
+
+            currentStepInfo.index = emptyFieldsIndexes[i];
+            newBoard[emptyFieldsIndexes[i]] = playerMark;
+
+            if (playerMark === "X") {
+                const result = minimax(newBoard, "O");
+                currentStepInfo.score = result;
+            } else {
+                const result = minimax(newBoard, "X");
+                currentStepInfo.score = result;
+            }
+
+            newBoard[emptyFieldsIndexes[i]] = "";
+            nextFields.push(currentStepInfo);
+        }
+        
+        let bestMove = null;
+
+        if ( playerMark === "O") {
+            let bestScore = -Infinity;
+            for (let i = 0; i < nextFields.length; i++) {
+                if (nextFields[i].score > bestScore) {
+                    bestScore = nextFields[i].score;
+                    bestMove = nextFields[i].index;
+                }
+            }
+        } else {
+            let bestScore = Infinity;
+            for (let i = 0; i < nextFields.length; i++) {
+                if (nextFields[i].score < bestScore) {
+                    bestScore = nextFields[i].score;
+                    bestMove = nextFields[i].index;
+                }
             }
         }
 
-        var moves = [];
-
-        for (var i = 0; i < availableFields.length; i++) {
-
-            var move = {};
-            move.index = availableFields[i];
-            newBoard[availableFields[i]] = player;
-
-            if (player === "O") {
-                var result = minimax(newBoard, "X");
-                move.score = result.score;
-            } else {
-                var result = minimax(newBoard, "O");
-                move.score = result.score;
-            }
-
-            availableFields[i] = move.index;
-
-            moves.push(move);
-        }
-            
-
-            var bestMove;
-
-            if (player === "O") {
-                var bestScore = -10000;
-                for ( var i = 0; i < moves.length; i++) {
-                    if(moves[i].score > bestScore) {
-                        bestScore = moves[i].score;
-                        bestMove = i;
-                    }
-                }
-            } else {
-                var bestScore = 10000;
-                for(var i = 0; i < moves.length; i++) {
-                    if (moves[i].score < bestScore) {
-                        bestScore = moves[i].score;
-                        bestMove = i;
-                    }
-                }
-            }
-
-            return moves[bestMove];
+        return bestMove;
     }
 
     return {aiMove, getEmptyFieldsIndex, minimax}
