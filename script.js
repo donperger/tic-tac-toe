@@ -88,10 +88,8 @@ const gameBoard = (() => {
                         var aiFieldId = ai.minimax(gridArray, "O").index;
                     }
 
-                    if (aiFieldId > -1 && aiFieldId < 9) {
-                            gridArray[aiFieldId] = "O";
-                            displayController.addAiMove(aiFieldId);
-                    }
+                    gridArray[aiFieldId] = "O";
+                    displayController.addAiMove(aiFieldId);
                 }
             }
             let check = checkFields(gridArray);
