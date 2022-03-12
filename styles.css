@@ -8,6 +8,7 @@
     --round-label-height: 10vh;
     --button-container-height: 15vh;
     --footer-container-height: 5vh;
+    --grid-cell-size: 8rem;
 }
 
 * {
@@ -182,9 +183,9 @@ input[type=text]:active {
 .game-board {
     display: grid;
     box-sizing: border-box;
-    height: calc(90vh - var(--round-label-height)  - var(--button-container-height));
-    grid-template-columns: repeat(3, 10rem);
-    grid-template-rows: repeat(3, 10rem);
+    height: max(calc(3 * var(--grid-cell-size) + 4 * 1rem),calc(90vh - var(--round-label-height)  - var(--button-container-height)));
+    grid-template-columns: repeat(3, var(--grid-cell-size));
+    grid-template-rows: repeat(3, var(--grid-cell-size));
     justify-content: center;
     padding: 1rem;
     gap: 1rem;
@@ -198,8 +199,8 @@ input[type=text]:active {
     align-items: center;
     background-color: #9BB9BF;
     font-size: 5rem;
-    width: 10rem;
-    height: 10rem;
+    width: var(--grid-cell-size);
+    height: var(--grid-cell-size);
     place-self: center;
     cursor: pointer;
 }
