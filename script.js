@@ -58,8 +58,8 @@ const formController = (() => {
 })();
 
 const gameBoard = (() => {
-    let gridArray = ["", "", "", 
-                    "", "", "", 
+    let gridArray = ["", "", "",
+                    "", "", "",
                     "", "", ""];
 
 
@@ -71,31 +71,35 @@ const gameBoard = (() => {
 
     function initializeListeners () {
         const gameBoardFields = document.querySelectorAll(".field");
-        
+
         gameBoardFields.forEach(field => {
         field.addEventListener("click", () => {
-            disableOneField(field.id);
+            _disableOneField(field.id);
             displayController.addText(field);
-            
+
             if (player2.name === "AI") {
                 const aiType = getAiType();
                 const isGameBoardFull = _chekFullGameBoard();
-                
+
                 if ( isGameBoardFull === false) {
                     if (aiType === "random") {
                         var aiFieldId = ai.aiMove(gridArray);
                     } else {
-                        var aiFieldId = ai.minimax(gridArray, "X");
-                    }       
+                        var aiFieldId = ai.minimax(gridArray, "O").index;
+                        console.log(aiFieldId);
+                    }
 
-                    gridArray[aiFieldId] = "O"; 
-                    displayController.addAiMove(aiFieldId);
-                }    
+                    if (aiFieldId > -1 && aiFieldId < 9) {
+                            gridArray[aiFieldId] = "O";
+                            displayController.addAiMove(aiFieldId);
+                    }
+                }
             }
             let check = checkFields(gridArray);
             if (check[0] === true || check[1] === "tie") {
                 addPoint(check[1]);
                 displayController.congratulate(check[1]);
+                _disableFields();
             }
         })
         })
@@ -131,7 +135,7 @@ const gameBoard = (() => {
         if (isGameBoardFull === true) {
             return [false, "tie"];
         }
-        
+
         return [false, undefined];
     }
 
@@ -144,14 +148,14 @@ const gameBoard = (() => {
 
         displayController.displayScores(player1.score, player2.score);
     }
-    
-    function disableFields() {
+
+    function _disableFields() {
         const fieldDivs = document.querySelectorAll(".field");
 
         fieldDivs.forEach(field => field.style.pointerEvents = "none");
     }
 
-    function disableOneField(fieldId) {
+    function _disableOneField(fieldId) {
         const filedDiv = document.getElementById(fieldId);
 
         filedDiv.style.pointerEvents = "none";
@@ -160,7 +164,7 @@ const gameBoard = (() => {
     function enableFields() {
         const fieldDivs = document.querySelectorAll(".field");
 
-        fieldDivs.forEach(field => field.style.pointerEvents = "auto");  
+        fieldDivs.forEach(field => field.style.pointerEvents = "auto");
     }
 
     function playAgain() {
@@ -201,7 +205,7 @@ const gameBoard = (() => {
 
 const ai = (() => {
     function aiMove(gridArray) {
-        
+
         let randomFieldNumber = Math.floor(Math.random()*gridArray.length);
 
         while (gridArray[randomFieldNumber]) {
@@ -209,7 +213,7 @@ const ai = (() => {
         }
 
         return randomFieldNumber;
-        
+
     };
 
     function getEmptyFieldsIndex(board) {
@@ -223,15 +227,15 @@ const ai = (() => {
 
     function minimax(newBoard, playerMark) {
         const emptyFieldsIndexes = getEmptyFieldsIndex(newBoard);
-        
+
         if (gameBoard.checkFields(newBoard)[0]) {
             if(gameBoard.checkFields(newBoard)[1] === "X") {
-                return -1;
+                return {score: -100};
             } else if (gameBoard.checkFields(newBoard)[1] === "O") {
-                return 1;
+                return {score: 100} ;
             }
         } else if (emptyFieldsIndexes.length === 0) {
-            return 0;
+            return {score: 0};
         }
 
         const nextFields = [];
@@ -244,16 +248,16 @@ const ai = (() => {
 
             if (playerMark === "X") {
                 const result = minimax(newBoard, "O");
-                currentStepInfo.score = result;
+                currentStepInfo.score = result.score;
             } else {
                 const result = minimax(newBoard, "X");
-                currentStepInfo.score = result;
+                currentStepInfo.score = result.score;
             }
 
             newBoard[emptyFieldsIndexes[i]] = "";
             nextFields.push(currentStepInfo);
         }
-        
+
         let bestMove = null;
 
         if ( playerMark === "O") {
@@ -261,7 +265,7 @@ const ai = (() => {
             for (let i = 0; i < nextFields.length; i++) {
                 if (nextFields[i].score > bestScore) {
                     bestScore = nextFields[i].score;
-                    bestMove = nextFields[i].index;
+                    bestMove = i;
                 }
             }
         } else {
@@ -269,16 +273,17 @@ const ai = (() => {
             for (let i = 0; i < nextFields.length; i++) {
                 if (nextFields[i].score < bestScore) {
                     bestScore = nextFields[i].score;
-                    bestMove = nextFields[i].index;
+                    bestMove = i;
                 }
             }
         }
 
-        return bestMove;
+        // console.log(nextFields)
+        return nextFields[bestMove];
     }
 
     return {aiMove, getEmptyFieldsIndex, minimax}
-})(); 
+})();
 
 const displayController = (() => {
     const gameBoardDiv = document.querySelector(".game-board");
@@ -302,7 +307,7 @@ const displayController = (() => {
             gameBoard.addMarkToArray(mark, fieldId);
 
             if (player2.name !== "AI") mark = mark === "X" ? "O" : "X";
-            
+
             displayMove();
         }
     }
@@ -366,7 +371,7 @@ const displayController = (() => {
         const gridField = document.getElementById(`field-${aiFieldId}`);
         gridField.innerText = "O";
     }
- 
+
     return {displayContent, displayScores, addText, emptyFields, congratulate, vanishAnnouncer, displayMove, addAiMove}
 
 })();
