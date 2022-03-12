@@ -20,9 +20,9 @@ const formController = (() => {
         };
     })
 
-    startButton.addEventListener("click", startGame);
+    startButton.addEventListener("click", _startGame);
 
-    function startGame() {
+    function _startGame() {
         if (player1NameInput.value) player1.name = player1NameInput.value;
         if (player2NameInput.value) {
             player2.name = player2NameInput.value;
@@ -64,10 +64,10 @@ const gameBoard = (() => {
 
 
     const playAgainButton = document.querySelector(".again");
-    playAgainButton.addEventListener("click", playAgain);
+    playAgainButton.addEventListener("click", _playAgain);
 
     const restartButton = document.querySelector(".res");
-    restartButton.addEventListener("click", restart);
+    restartButton.addEventListener("click", _restart);
 
     function initializeListeners () {
         const gameBoardFields = document.querySelectorAll(".field");
@@ -78,7 +78,7 @@ const gameBoard = (() => {
             displayController.addText(field);
 
             if (player2.name === "AI") {
-                const aiType = getAiType();
+                const aiType = _getAiType();
                 const isGameBoardFull = _chekFullGameBoard();
 
                 if ( isGameBoardFull === false) {
@@ -86,7 +86,6 @@ const gameBoard = (() => {
                         var aiFieldId = ai.aiMove(gridArray);
                     } else {
                         var aiFieldId = ai.minimax(gridArray, "O").index;
-                        console.log(aiFieldId);
                     }
 
                     if (aiFieldId > -1 && aiFieldId < 9) {
@@ -97,7 +96,7 @@ const gameBoard = (() => {
             }
             let check = checkFields(gridArray);
             if (check[0] === true || check[1] === "tie") {
-                addPoint(check[1]);
+                _addPoint(check[1]);
                 displayController.congratulate(check[1]);
                 _disableFields();
             }
@@ -139,7 +138,7 @@ const gameBoard = (() => {
         return [false, undefined];
     }
 
-    function addPoint (mark) {
+    function _addPoint (mark) {
         if (mark === "X") {
             player1.score += 1;
         } else if (mark === "O") {
@@ -167,26 +166,26 @@ const gameBoard = (() => {
         fieldDivs.forEach(field => field.style.pointerEvents = "auto");
     }
 
-    function playAgain() {
+    function _playAgain() {
         displayController.vanishAnnouncer();
 
         displayController.emptyFields();
 
-        emptyGridArray();
+        _emptyGridArray();
     }
 
-    function emptyGridArray () {
+    function _emptyGridArray () {
         gridArray = gridArray.map(item => item = "");
     }
 
-    function restart() {
+    function _restart() {
         displayController.vanishAnnouncer();
 
         player1.score = 0;
         player2.score = 0;
         displayController.displayScores(player1.score, player2.score);
 
-        emptyGridArray();
+        _emptyGridArray();
         displayController.emptyFields();
 
         formController.displayForm();
@@ -196,7 +195,7 @@ const gameBoard = (() => {
         return gridArray.every((item) => Boolean(item) === true)
     }
 
-    function getAiType() {
+    function _getAiType() {
         return document.querySelector("#ai").value;
     }
 
@@ -216,7 +215,7 @@ const ai = (() => {
 
     };
 
-    function getEmptyFieldsIndex(board) {
+    function _getEmptyFieldsIndex(board) {
         let indexedBoard = board.map((elem, index) => {
             if (elem) return elem;
             else return index;
@@ -226,7 +225,7 @@ const ai = (() => {
     }
 
     function minimax(newBoard, playerMark) {
-        const emptyFieldsIndexes = getEmptyFieldsIndex(newBoard);
+        const emptyFieldsIndexes = _getEmptyFieldsIndex(newBoard);
 
         if (gameBoard.checkFields(newBoard)[0]) {
             if(gameBoard.checkFields(newBoard)[1] === "X") {
@@ -278,11 +277,10 @@ const ai = (() => {
             }
         }
 
-        // console.log(nextFields)
         return nextFields[bestMove];
     }
 
-    return {aiMove, getEmptyFieldsIndex, minimax}
+    return {aiMove, minimax}
 })();
 
 const displayController = (() => {
@@ -312,7 +310,7 @@ const displayController = (() => {
         }
     }
 
-    function createGridCell(item, index) {
+    function _createGridCell(item, index) {
         const xoContainer = document.createElement("div");
         xoContainer.setAttribute("id",`field-${index}`);
         xoContainer.classList.add("field");
@@ -323,7 +321,7 @@ const displayController = (() => {
 
     function displayContent (array) {
         array.forEach((item, index) => {
-            createGridCell(item, index)
+            _createGridCell(item, index)
         })
 
         displayMove();
