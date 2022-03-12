@@ -4,6 +4,10 @@
     --header-bg-color: #233840;
     --main-bg-color: #0F2617; 
     --footer-bg-color: #517d8f;
+    --header-height: 10vh;
+    --round-label-height: 10vh;
+    --button-container-height: 15vh;
+    --footer-container-height: 5vh;
 }
 
 * {
@@ -12,17 +16,14 @@
     margin: 0;
 }
 
-body {
-    width: 100vw;
-}
-
 /*header*/
 
 .header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 10vh;
+    box-sizing: border-box;
+    height: var(--header-height);
     padding: 1rem;
     background-color: var(--header-bg-color);
 }
@@ -54,6 +55,7 @@ body {
 /*name form*/
 .name-form {
     height: 50vh;
+    width: 100%;
     padding: 1rem;
     display: grid;
     place-content: center;
@@ -61,7 +63,6 @@ body {
     position: absolute;
     top: 10vh;
     box-sizing: border-box;
-    width: 100%;
     background-color: rgba(255, 255, 255, .9);
 }
 
@@ -87,7 +88,7 @@ input[type=text] {
 }
 
 input[type=text]:active {
-    border: 1px solid #424242
+    border: 1px solid #424242;
 }
 
 .player1-input{
@@ -107,6 +108,13 @@ input[type=text]:active {
     flex-direction: column;
     justify-content: flex-end;
     margin-left: 1rem;
+}
+
+.ai-dropdown select {
+    border: 1px solid rgba(42, 42, 42, .4);
+    border-radius: .5rem;
+    cursor: pointer;
+    background-color: #fff;
 }
 
 #ai {
@@ -141,6 +149,10 @@ input[type=text]:active {
 
 /*annuoncer*/
 
+.game-board-container {
+    height: 90vh;
+}
+
 .announcer {
     display: none;
     box-sizing: border-box;
@@ -158,7 +170,7 @@ input[type=text]:active {
 
 .round-label {
     box-sizing: border-box;
-    height: 10vh;
+    height: var(--round-label-height);
     background-color: var(--main-bg-color);
     color: var(--light-font-color);
     font-size: 2rem;
@@ -170,8 +182,7 @@ input[type=text]:active {
 .game-board {
     display: grid;
     box-sizing: border-box;
-    width: 100vW;
-    height: 65vh;
+    height: calc(90vh - var(--round-label-height)  - var(--button-container-height));
     grid-template-columns: repeat(3, 10rem);
     grid-template-rows: repeat(3, 10rem);
     justify-content: center;
@@ -187,22 +198,22 @@ input[type=text]:active {
     align-items: center;
     background-color: #9BB9BF;
     font-size: 5rem;
-    width: 100%;
-    height: 100%;
+    width: 10rem;
+    height: 10rem;
     place-self: center;
     cursor: pointer;
 }
 
 .button-container {
     box-sizing: border-box;
+    height: var(--button-container-height);
     background-color: var(--main-bg-color);
-    padding-bottom: 6vh;
     display: flex;
     justify-content: center;
 }
 
 .button-container button {
-    height: 3rem;
+    height: 4.5vh;
     width: 10rem;
     font-size: 1.2rem;
     border: 1px solid #404040;
@@ -237,6 +248,7 @@ input[type=text]:active {
 /*footer*/
 
 .footer-container {
+    height: var(--footer-container-height);
     display: flex;
     justify-content: center;
     align-items: center;
