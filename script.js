@@ -181,6 +181,8 @@ const gameBoard = (() => {
 
         player1.score = 0;
         player2.score = 0;
+        player1.name = "Player 1";
+        player2.name = "Player 2";
         displayController.displayScores(player1.score, player2.score);
 
         _emptyGridArray();
@@ -372,8 +374,8 @@ const displayController = (() => {
 
 })();
 
-const player1 = player("p1", "X");
-const player2 = player("p2", "O");
+const player1 = player("Player 1", "X");
+const player2 = player("Player 2", "O");
 
 displayController.displayScores(player1.score, player2.score);
 displayController.displayContent( gameBoard.gridArray);
